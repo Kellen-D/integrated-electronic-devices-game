@@ -3,7 +3,7 @@ project:
   title:        "IC Project"      # Project title
   author:       "Kellen D"      # Your name
   discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  "Initial working VGA 1-player ball and paddle game"      # One line description of what your project does
+  description:  "Moved player 1 to left half of monitor and changed color of paddle and dividing wall"      # One line description of what your project does
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     25175000       # Clock frequency in Hz (or 0 if not applicable)
 

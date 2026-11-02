@@ -18,6 +18,11 @@ module game_core #(
     localparam [9:0] PADDLE_Y = 10'd448;
     localparam [9:0] PADDLE_W = 10'd64;
     localparam [9:0] BALL     = 10'd8;
+    localparam [0:6] BLACK    = 6'b00_00_00;
+    localparam [0:6] WHITE    = 6'b11_11_11;
+    localparam [0:6] RED      = 6'b11_00_00;
+    localparam [0:6] CYAN     = 6'b00_11_11;
+    localparam [0:6] GREEN    = 6'b00_11_00;
 
     // 1. clean up the two buttons
     wire left_c, right_c;
@@ -30,14 +35,14 @@ module game_core #(
 
     // 3. the paddle moves every picture
     wire [9:0] paddle_x;
-    ip_paddle #(.MAX(640 - 64), .STEP(4)) paddle (
+    ip_paddle #(.MAX(320 - 64), .STEP(4)) paddle (
         .clk(clk), .rst_n(rst_n), .step(frame), .left(left_c), .right(right_c), .pos(paddle_x)
     );
 
     // 4. the ball
     wire [9:0] ball_x, ball_y;
     wire       miss;
-    ip_ball #(.W(640), .SIZE(8), .SPEED(4), .XSPEED(2), .PY(448), .PW(64)) ball (
+    ip_ball #(.W(320), .SIZE(8), .SPEED(4), .XSPEED(2), .PY(448), .PW(64)) ball (
         .clk(clk), .rst_n(rst_n), .step(ball_step), .paddle_x(paddle_x), .x(ball_x), .y(ball_y), .miss(miss)
     );
 
@@ -46,6 +51,10 @@ module game_core #(
     ip_rect paddle_rect (.x(x), .y(y), .rx(paddle_x), .ry(PADDLE_Y), .rw(PADDLE_W), .rh(10'd8), .hit(paddle_hit));
     ip_rect ball_rect   (.x(x), .y(y), .rx(ball_x),   .ry(ball_y),   .rw(BALL),     .rh(BALL),  .hit(ball_hit));
 
+    // 5b. the wall down the middle; the playfield is now the left half
+    wire wall_hit;
+    ip_rect wall_rect   (.x(x), .y(y), .rx(10'd320),  .ry(10'd0),    .rw(10'd8),    .rh(10'd480), .hit(wall_hit));
+
     // 6. count the misses, and show them as a brighter background
     reg [1:0] misses;
     always @(posedge clk) begin
@@ -53,9 +62,10 @@ module game_core #(
         else if (miss) misses <= misses + 2'd1;
     end
 
-    // 7. colour: ball white, paddle green, otherwise blue that gets brighter with every miss
-    assign rgb = !active   ? 6'b00_00_00 :
-                 ball_hit  ? 6'b11_11_11 :
-                 paddle_hit ? 6'b00_11_00 :
+    // 7. colour: ball white, paddle green, center divider green, otherwise blue that gets brighter with every miss
+    assign rgb = !active   ? BLACK :
+                 ball_hit  ? WHITE :
+                 paddle_hit ? GREEN :
+                 wall_hit   ? RED :
                               {4'b0000, misses};
 endmodule
