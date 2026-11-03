@@ -9,16 +9,18 @@ module ip_tick #(
     input  wire en,
     output wire tick
 );
-    reg [19:0] count;
+    // only as many bits as DIV needs, so a DIV of 2 costs one flop, not twenty
+    localparam CW = (DIV > 1) ? $clog2(DIV) : 1;
+    reg [CW-1:0] count;
 
     assign tick = en && (count == DIV - 1);
 
     always @(posedge clk) begin
         if (!rst_n) begin
-            count <= 20'd0;
+            count <= {CW{1'b0}};
         end else if (en) begin
-            if (count == DIV - 1) count <= 20'd0;
-            else                  count <= count + 20'd1;
+            if (count == DIV - 1) count <= {CW{1'b0}};
+            else                  count <= count + 1'b1;
         end
     end
 endmodule

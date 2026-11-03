@@ -1,6 +1,6 @@
 // The Tiny Tapeout top module for the game track (the shell). It is given and you do not edit it.
 // It makes the VGA timing and hands your core the pixel position, the buttons and a once per
-// picture pulse. Your core gives back one colour. Buttons: ui_in[0] left, ui_in[1] right.
+// picture pulse. Your core gives back one colour. Buttons: ui_in[0] slide up, ui_in[1] slide down.
 `default_nettype none
 
 module tt_um_kellen_d_game_paddle_and_ball (
@@ -21,7 +21,7 @@ module tt_um_kellen_d_game_paddle_and_ball (
 
     game_core core (
         .clk(clk), .rst_n(rst_n),
-        .left(ui_in[0]), .right(ui_in[1]),
+        .up1(ui_in[0]), .down1(ui_in[1]),      // player 1: slide the paddle up / down
         .x(x), .y(y), .active(active), .frame(frame),
         .rgb(rgb)
     );
