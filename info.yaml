@@ -3,7 +3,7 @@ project:
   title:        "IC Project"      # Project title
   author:       "Kellen D"      # Your name
   discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  "Deleted player 2; shifted player 1 from horizontal to vertical paddle along the left wall"      # One line description of what your project does
+  description:  "Adjusted boundaries for bouncing ball and added paddle for player 2 (controlled by ui_in ports 2 and 3)"      # One line description of what your project does
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     25175000       # Clock frequency in Hz (or 0 if not applicable)
 
@@ -19,6 +19,7 @@ project:
   source_files:
     - "game_core.v"
     - "ip_ball.v"
+    - "ip_ball_v.v"
     - "ip_debounce.v"
     - "ip_paddle.v"
     - "ip_rect.v"
