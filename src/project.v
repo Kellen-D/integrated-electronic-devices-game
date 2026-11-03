@@ -1,7 +1,8 @@
 // The Tiny Tapeout top module for the game track (the shell). It is given and you do not edit it.
 // It makes the VGA timing and hands your core the pixel position, the buttons and a once per
-// picture pulse. Your core gives back one colour. Buttons: ui_in[0] slide up, ui_in[1] slide down
-// (player 1), ui_in[2] slide up, ui_in[3] slide down (player 2).
+// picture pulse. Your core gives back one colour. Buttons: ui_in[1] slide up, ui_in[2] slide down
+// (player 1), ui_in[4] slide up, ui_in[5] slide down (player 2). ui_in[0], ui_in[3], ui_in[6] and
+// ui_in[7] are spare.
 `default_nettype none
 
 module tt_um_kellen_d_game_paddle_and_ball (
@@ -22,8 +23,8 @@ module tt_um_kellen_d_game_paddle_and_ball (
 
     game_core core (
         .clk(clk), .rst_n(rst_n),
-        .up1(ui_in[0]), .down1(ui_in[1]),      // player 1: slide the paddle up / down
-        .up2(ui_in[2]), .down2(ui_in[3]),      // player 2: slide the right paddle up / down
+        .up1(ui_in[1]), .down1(ui_in[2]),      // player 1: slide the paddle up / down
+        .up2(ui_in[4]), .down2(ui_in[5]),      // player 2: slide the right paddle up / down
         .x(x), .y(y), .active(active), .frame(frame),
         .rgb(rgb)
     );
@@ -33,5 +34,5 @@ module tt_um_kellen_d_game_paddle_and_ball (
     assign uio_out = 8'd0;
     assign uio_oe  = 8'd0;
 
-    wire _unused = &{ena, uio_in, ui_in[7:4], 1'b0};
+    wire _unused = &{ena, uio_in, ui_in[7:6], ui_in[3], ui_in[0], 1'b0};
 endmodule
